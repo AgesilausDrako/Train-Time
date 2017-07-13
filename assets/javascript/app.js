@@ -1,13 +1,13 @@
 var config = {
-    apiKey: "AIzaSyAr0Ale4f3tuWsdhqhkujyRwxFYWQtSXI4",
-    authDomain: "claybase-83c0d.firebaseapp.com",
-    databaseURL: "https://claybase-83c0d.firebaseio.com",
-    projectId: "claybase-83c0d",
-    storageBucket: "claybase-83c0d.appspot.com",
-    messagingSenderId: "198022101030"
-};
+    apiKey: "AIzaSyC2dUMyqWzbNTUFrMNgqQGUwEpl-HKuZXw",
+    authDomain: "train-time-17d66.firebaseapp.com",
+    databaseURL: "https://train-time-17d66.firebaseio.com",
+    projectId: "train-time-17d66",
+    storageBucket: "",
+    messagingSenderId: "363894535170"
+ };
 
-firebase.initializeApp(config);
+ firebase.initializeApp(config);
 
 
 // Create a variable to reference the database.
@@ -17,29 +17,31 @@ $("#add-train-btn").on("click", function(){
 
 	event.preventDefault();
 
-	var newTrain = $("#trainName").val().trim();
-	var newDestination = $("#destination").val().trim();
-	var newTime = $("#time").val().trim();
-	var newFrequency = $("#frequency").val().trim();
+	// Prevents the user from submitting without text
+    if ($("input").val() === "") {
+    	console.log("Invalid input!");
+    	return false
+    } else {
 
-	database.ref("/trains").push({
-		train: newTrain,
-		destination: newDestination,
-		time: newTime,
-		frequency: newFrequency
-	});
+		var newTrain = $("#trainName").val().trim();
+		var newDestination = $("#destination").val().trim();
+	    var newFirstTime = $("#firstTime").val().trim();
+		var newFrequency = $("#frequency").val().trim();
+	    
+		database.ref("/trains").push({
+			train: newTrain,
+			destination: newDestination,
+			frequency: newFrequency,
+			time: newFirstTime
+		});
 
-	// Logs everything to console
-	console.log(newEntry.train);
-	console.log(newEntry.destination);
-	console.log(newEntry.time);
-	console.log(newEntry.frequency);
+		// Clears all of the text-boxes
+		$("#trainName").val("");
+		$("#destination").val("");
+		$("#firstTime").val("");
+		$("#frequency").val("");
+	}	
 
-	// Clears all of the text-boxes
-	$("#trainName").val("");
-	$("#destination").val("");
-	$("#time").val("");
-	$("#frequency").val("");
 });
 
 database.ref("/trains").on("child_added", function(childSnapshot) {
@@ -47,14 +49,40 @@ database.ref("/trains").on("child_added", function(childSnapshot) {
 
     var newTrain = childSnapshot.val().train;
     var newDestination = childSnapshot.val().destination;
-    var newTime = childSnapshot.val().time;
     var newFrequency = childSnapshot.val().frequency;
+    var newFirstTime = childSnapshot.val().time;
+
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var firstTimeConverted = moment(newFirstTime, "hh:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % newFrequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var tMinutesTillTrain = newFrequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    var next = moment(nextTrain).format("hh:mm");
 
     console.log(newTrain);
     console.log(newDestination);
-    console.log(newTime);
+    console.log(next);
     console.log(newFrequency);
+    console.log(tMinutesTillTrain);
 
 	$("#train-table > tbody").append("<tr><td>" + newTrain + "</td><td>" + newDestination + "</td><td>" +
-	  newTrain + "</td><td>" + newFrequency + "</td><td>");
+	  newFrequency + "</td><td>" + next + "</td><td>" + tMinutesTillTrain);
 });
+

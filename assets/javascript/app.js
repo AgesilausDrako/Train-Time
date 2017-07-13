@@ -84,5 +84,7 @@ database.ref("/trains").on("child_added", function(childSnapshot) {
 
 	$("#train-table > tbody").append("<tr><td>" + newTrain + "</td><td>" + newDestination + "</td><td>" +
 	  newFrequency + "</td><td>" + next + "</td><td>" + tMinutesTillTrain);
+	}, function(errorObject) {
+		console.log("Errors handled: " + errorObject.code);
 });
 

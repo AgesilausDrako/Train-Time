@@ -13,8 +13,10 @@ var config = {
 // Create a variable to reference the database.
 var database = firebase.database();
 
+// Form submit event
 $("#add-train-btn").on("click", function(){
 
+	// Prevents default page refresh
 	event.preventDefault();
 
 	// Prevents the user from submitting without text
@@ -22,12 +24,13 @@ $("#add-train-btn").on("click", function(){
     	console.log("Invalid input!");
     	return false
     } else {
-
+    	// Variables for input submissions
 		var newTrain = $("#trainName").val().trim();
 		var newDestination = $("#destination").val().trim();
 	    var newFirstTime = $("#firstTime").val().trim();
 		var newFrequency = $("#frequency").val().trim();
 	    
+	    // Data pushed to database
 		database.ref("/trains").push({
 			train: newTrain,
 			destination: newDestination,
@@ -47,6 +50,7 @@ $("#add-train-btn").on("click", function(){
 database.ref("/trains").on("child_added", function(childSnapshot) {
 	console.log(childSnapshot.val());
 
+	// Variables for object data
     var newTrain = childSnapshot.val().train;
     var newDestination = childSnapshot.val().destination;
     var newFrequency = childSnapshot.val().frequency;
@@ -82,9 +86,15 @@ database.ref("/trains").on("child_added", function(childSnapshot) {
     console.log(newFrequency);
     console.log(tMinutesTillTrain);
 
+    // Appends variable data to document's html
 	$("#train-table > tbody").append("<tr><td>" + newTrain + "</td><td>" + newDestination + "</td><td>" +
 	  newFrequency + "</td><td>" + next + "</td><td>" + tMinutesTillTrain);
 	}, function(errorObject) {
 		console.log("Errors handled: " + errorObject.code);
 });
+
+// Refreshes page every 60 seconds for page update
+setTimeout(function(){
+    location = ''
+  },60000);
 

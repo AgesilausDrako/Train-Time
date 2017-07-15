@@ -24,7 +24,8 @@ $("#add-train-btn").on("click", function(){
 	});
 	// Prevents the user from submitting the form without any text
     if ($("#train-name").val() === "" || $("#destination").val() === "" || 
-    	$("#firstTime").val() === "" || $("#frequency").val() === "") {
+    	$("#firstTime").val() === "" || $("#frequency").val() === "" || 
+    	isNaN($("#frequency").val())) {
     	console.log("Invalid input!");
     	return false
     } else {

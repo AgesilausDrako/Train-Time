@@ -26,16 +26,18 @@ $("#add-train-btn").on("click", function(){
     if ($("#train-name").val() === "" || $("#destination").val() === "" || 
     	$("#firstTime").val() === "" || $("#frequency").val() === "" || 
     	isNaN($("#frequency").val())) {
+
     	console.log("Invalid input!");
     	return false
+
     } else {
-    	
+
     	// Variables for input submissions
 		var newTrain = $("#trainName").val().trim();
 		var newDestination = $("#destination").val().trim();
 	    var newFirstTime = $("#firstTime").val().trim();
 		var newFrequency = $("#frequency").val().trim();
-	    
+
 	    // Data pushed to database
 		database.ref("/trains").push({
 			train: newTrain,
@@ -43,14 +45,13 @@ $("#add-train-btn").on("click", function(){
 			frequency: newFrequency,
 			time: newFirstTime
 		});
-
+		
 		// Clears all of the text-boxes
 		$("#trainName").val("");
 		$("#destination").val("");
 		$("#firstTime").val("");
 		$("#frequency").val("");
 	}	
-
 });
 
 database.ref("/trains").on("child_added", function(childSnapshot) {

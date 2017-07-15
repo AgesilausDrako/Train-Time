@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.74/jquery.form-validator.min.js"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 	</head>
 	<body>
@@ -55,22 +56,22 @@
 		              <h3 class="panel-title">Add Train</h3>
 		            </div>
 		         <div class="panel-body">
-				<form>
+				<form id="train-form">
 				  <div class="form-group">
 				    <label for="name">Train Name</label>
-				    <input type="text" class="form-control" id="trainName"  placeholder="">
+				    <input type="text" class="form-control" id="trainName" data-validation="required alphanumeric"  placeholder="Train">
 				  </div>
 				  <div class="form-group">
 				    <label for="destination">Destination</label>
-				    <input type="text" class="form-control" id="destination" placeholder="">
+				    <input type="text" class="form-control" id="destination" data-validation="required alphanumeric" placeholder="Destination">
 				  </div>
 				  <div class="form-group">
 				    <label for="time">First Train Time (HH:mm military time)</label>
-				    <input type="text" class="form-control" id="firstTime" placeholder="">
+				    <input type="text" class="form-control" id="firstTime" data-validation="required number" placeholder="First Train">
 				  </div>
 				  <div class="form-group">
 				    <label for="frequency">Frequency (min)</label>
-				    <input type="text" class="form-control" id="frequency" placeholder="">
+				    <input type="text" class="form-control" id="frequency" data-validation="required number" placeholder="Frequency in minutes">
 				  </div>
 				  <button id="add-train-btn" type="submit" class="btn btn-lg btn-inverse">Submit</button>
 				</form>

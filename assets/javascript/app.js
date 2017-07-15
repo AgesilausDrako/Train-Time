@@ -18,12 +18,17 @@ $("#add-train-btn").on("click", function(){
 
 	// Prevents default page refresh
 	event.preventDefault();
-
-	// Prevents the user from submitting without text
-    if ($("input").val() === "") {
+	// Checks custom validations for input fields
+	$.validate({
+	  form : "#train-form"
+	});
+	// Prevents the user from submitting the form without any text
+    if ($("#train-name").val() === "" || $("#destination").val() === "" || 
+    	$("#firstTime").val() === "" || $("#frequency").val() === "") {
     	console.log("Invalid input!");
     	return false
     } else {
+    	
     	// Variables for input submissions
 		var newTrain = $("#trainName").val().trim();
 		var newDestination = $("#destination").val().trim();
